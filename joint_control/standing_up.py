@@ -7,16 +7,63 @@
 
 
 from recognize_posture import PostureRecognitionAgent
+from keyframes import leftBackToStand
+from keyframes import leftBellyToStand
+from keyframes import rightBackToStand
+from keyframes import rightBellyToStand
+from keyframes import wipe_forehead
+from keyframes import hello
+
 
 
 class StandingUpAgent(PostureRecognitionAgent):
+
     def think(self, perception):
         self.standing_up()
         return super(StandingUpAgent, self).think(perception)
 
     def standing_up(self):
+
         posture = self.posture
         # YOUR CODE HERE
+        '''''
+        if posture == 'Stand' or posture == 'StandInit':
+            pass
+        elif posture == 'Back':
+            if StandingUpAgent.use_right:
+                self.keyframe = rightBackToStand()
+            else:
+                self.keyframe = leftBackToStand()
+            StandingUpAgent.use_right = not StandingUpAgent.use_right  # 切换
+        elif posture == 'Belly':
+            if StandingUpAgent.use_right:
+                self.keyframes = rightBellyToStand()  # 请确保这些是有效的函数或者方法
+            else:
+                self.keyframes = leftBellyToStand()
+            StandingUpAgent.use_right = not StandingUpAgent.use_right  # 切换
+        elif posture == 'Crouch':
+            self.keyframe = rightBellyToStand()
+        elif posture == 'Frog':
+            self.keyframe = rightBellyToStand()
+        elif posture == 'HeadBack':
+            self.keyframe = leftBellyToStand()
+        elif posture == 'Knee':
+            self.keyframe = leftBellyToStand()
+        elif posture == 'Left':
+            self.keyframes = leftBackToStand()
+        elif posture == 'Right':
+            self.keyframes = rightBackToStand()
+        elif posture == 'Sit':
+            self.keyframes = rightBellyToStand()
+        '''''
+        if posture in ["Back", "Left"]:
+            self.keyframes = leftBackToStand()
+        elif posture == "Belly":
+            self.keyframes = leftBellyToStand()
+        elif posture == "Right":
+            self.keyframes = rightBackToStand()
+
+
 
 
 class TestStandingUpAgent(StandingUpAgent):

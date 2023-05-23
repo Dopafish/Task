@@ -10,6 +10,7 @@
 '''
 
 # add PYTHONPATH
+
 import os
 import sys
 sys.path.append(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'software_installation'))
@@ -35,9 +36,9 @@ class PIDController(object):
         self.e2 = np.zeros(size)
         # ADJUST PARAMETERS BELOW
         delay = 0
-        self.Kp = 0
-        self.Ki = 0
-        self.Kd = 0
+        self.Kp = 25
+        self.Ki = 0.4
+        self.Kd = 0.1
         self.y = deque(np.zeros(size), maxlen=delay + 1)
 
     def set_delay(self, delay):
@@ -53,6 +54,26 @@ class PIDController(object):
         @return control signal
         '''
         # YOUR CODE HERE
+
+        new_sensor = sensor + self.u * self.dt
+        error = target - new_sensor
+
+
+        # calculate  for new P, I, D
+        kp_term = self.Kp * (error - self.e1)
+        ki_term = self.Ki * self.dt * error
+        kd_term = self.Kd / self.dt * (error - 2 * self.e1 + self.e2)
+
+        # New control signal
+        self.u += kp_term + ki_term + kd_term
+
+
+        # New e1,e2
+        self.e2=self.e1
+        self.e1=error
+
+        # New y
+        self.y.appendleft(new_sensor)
 
         return self.u
 
