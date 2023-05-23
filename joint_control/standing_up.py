@@ -18,12 +18,13 @@ from keyframes import hello
 
 class StandingUpAgent(PostureRecognitionAgent):
 
+    use_right = True
+
     def think(self, perception):
         self.standing_up()
         return super(StandingUpAgent, self).think(perception)
 
     def standing_up(self):
-
         posture = self.posture
         # YOUR CODE HERE
         '''''
@@ -55,13 +56,16 @@ class StandingUpAgent(PostureRecognitionAgent):
             self.keyframes = rightBackToStand()
         elif posture == 'Sit':
             self.keyframes = rightBellyToStand()
-        '''''
-        if posture in ["Back", "Left"]:
+
+       '''''
+
+        if posture == "Back" or posture ==  "Left":
             self.keyframes = leftBackToStand()
         elif posture == "Belly":
             self.keyframes = leftBellyToStand()
         elif posture == "Right":
             self.keyframes = rightBackToStand()
+
 
 
 
