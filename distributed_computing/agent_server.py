@@ -40,15 +40,15 @@ class ServerAgent(InverseKinematicsAgent):
     def __init__(self):
         super(ServerAgent, self).__init__()
 
-        self.post = PostHandler(self)
+        #self.post = PostHandler(self)
         self.server = SimpleXMLRPCServer(("localhost", 8001))
 
-        self.server.register_function(self.get_angle, "get_angle")
-        self.server.register_function(self.set_angle, "set_angle")
-        self.server.register_function(self.get_posture, "get_posture")
-        self.server.register_function(self.execute_keyframes, "execute_keyframes")
-        self.server.register_function(self.get_transform, "get_transform")
-        self.server.register_function(self.set_transform, "set_transform")
+        self.server.register_function(self.get_angle, "rpc_get_angle")
+        self.server.register_function(self.set_angle, "rpc_set_angle")
+        self.server.register_function(self.get_posture, "rpc_get_posture")
+        self.server.register_function(self.execute_keyframes, "rpc_execute_keyframes")
+        self.server.register_function(self.get_transform, "rpc_get_transform")
+        self.server.register_function(self.set_transform, "rpc_set_transform")
 
         try:
             t = threading.Thread(target=self.server.serve_forever)
@@ -59,7 +59,8 @@ class ServerAgent(InverseKinematicsAgent):
     def get_angle(self, joint_name):
         '''get sensor value of given joint'''
         # YOUR CODE HERE
-        if joint_name in self.joint_names and joint_name in self.perception.joint:
+        #if joint_name in self.joint_names and joint_name in self.perception.joint:
+        if joint_name in self.perception.joint:
             return self.perception.joint[joint_name]
         else:
             return "Invalid joint name"
@@ -84,6 +85,7 @@ class ServerAgent(InverseKinematicsAgent):
         '''
         # YOUR CODE HERE
         self.keyframes = keyframes
+
 
     def get_transform(self, name):
         '''get transform with given name
